@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier : {{ article.titre }}{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="mb-4">✏️ Modifier l'article</h1>
+            <p class="text-muted mb-4 pb-2 border-bottom">Modification de « {{ article.titre }} »</p>
+
+            {{ form_start(formulaire, {attr: {novalidate: 'novalidate'}}) }}
+                <div class="mb-3">{{ form_row(formulaire.titre) }}</div>
+                <div class="mb-3">{{ form_row(formulaire.contenu) }}</div>
+                <div class="mb-3">{{ form_row(formulaire.auteur) }}</div>
+                <div class="mb-3">{{ form_row(formulaire.categorie) }}</div>
+                <div class="mb-3">{{ form_row(formulaire.dateCreation) }}</div>
+                <div class="mb-3">{{ form_row(formulaire.publie) }}</div>
+                {{ form_row(formulaire.enregistrer) }}
+            {{ form_end(formulaire) }}
+
+            <a href="{{ path('app_article_detail', {id: article.id}) }}" class="btn btn-link mt-3 text-muted">
+                ← Annuler
+            </a>
+        </div>
+    </div>
+{% endblock %}

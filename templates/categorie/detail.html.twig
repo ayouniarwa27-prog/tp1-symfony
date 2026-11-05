@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ categorie.nom }}{% endblock %}
+
+{% block body %}
+    <h1 class="display-5">📂 {{ categorie.nom }}</h1>
+
+    <p class="text-muted mb-4 pb-2 border-bottom">
+        {{ categorie.description ?? 'Aucune description.' }}
+    </p>
+
+    <h2 class="h4 mb-3">Articles de cette catégorie</h2>
+
+    {% if categorie.articles is empty %}
+        <div class="alert alert-info">Aucun article dans cette catégorie.</div>
+    {% else %}
+        <ul class="list-group mb-4">
+            {% for article in categorie.articles %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{{ path('app_article_detail', {id: article.id}) }}">{{ article.titre }}</a>
+                    <small class="text-muted">{{ article.auteur }} — {{ article.dateCreation|date('d/m/Y') }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="d-flex gap-2 align-items-center">
+        <a href="{{ path('app_categorie_modifier', {id: categorie.id}) }}" class="btn btn-primary">✏️ Modifier</a>
+
+        <form method="post" action="{{ path('app_categorie_supprimer', {id: categorie.id}) }}"
+              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?');" class="d-inline">
+            <input type="hidden" name="_token" value="{{ csrf_token('supprimer_categorie_' ~ categorie.id) }}">
+            <button type="submit" class="btn btn-danger">🗑️ Supprimer</button>
+        </form>
+
+        <a href="{{ path('app_categories') }}" class="btn btn-outline-secondary">← Retour aux catégories</a>
+    </div>
+{% endblock %}

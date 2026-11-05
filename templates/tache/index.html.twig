@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes tâches{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .terminee { text-decoration: line-through; color: #6c757d; }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>✅ Mes tâches</h1>
+        <a href="{{ path('app_tache_ajouter') }}" class="btn btn-primary">+ Ajouter une tâche</a>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    {% if taches is empty %}
+        <div class="alert alert-info">Aucune tâche pour le moment.</div>
+    {% else %}
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr><th>ID</th><th>Titre</th><th>Créée le</th><th>Statut</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+                {% for tache in taches %}
+                    <tr>
+                        <td>{{ tache.id }}</td>
+                        <td class="{{ tache.terminee ? 'terminee' : '' }}">
+                            <a href="{{ path('app_tache_detail', {id: tache.id}) }}" class="{{ tache.terminee ? 'terminee' : '' }}">{{ tache.titre }}</a>
+                        </td>
+                        <td>{{ tache.dateCreation|date('d/m/Y H:i') }}</td>
+                        <td>
+                            {% if tache.terminee %}
+                                <span class="badge bg-success">Terminée</span>
+                            {% else %}
+                                <span class="badge bg-secondary">À faire</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not tache.terminee %}
+                                <a href="{{ path('app_tache_terminer', {id: tache.id}) }}" class="btn btn-sm btn-outline-success">Terminer</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p class="text-muted">{{ taches|length }} tâche(s)</p>
+    {% endif %}
+{% endblock %}

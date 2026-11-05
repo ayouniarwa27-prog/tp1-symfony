@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ tache.titre }}{% endblock %}
+
+{% block body %}
+    <h1 {% if tache.terminee %}style="text-decoration: line-through;"{% endif %}>{{ tache.titre }}</h1>
+
+    <p class="text-muted border-bottom pb-2">
+        Créée le {{ tache.dateCreation|date('d/m/Y à H:i') }}
+        {% if tache.terminee %}
+            <span class="badge bg-success ms-2">Terminée</span>
+        {% else %}
+            <span class="badge bg-secondary ms-2">À faire</span>
+        {% endif %}
+    </p>
+
+    <p class="lead">{{ tache.description ?? 'Aucune description.' }}</p>
+
+    {% if not tache.terminee %}
+        <a href="{{ path('app_tache_terminer', {id: tache.id}) }}" class="btn btn-success">Marquer comme terminée</a>
+    {% endif %}
+    <a href="{{ path('app_taches') }}" class="btn btn-outline-secondary">← Retour à la liste</a>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catégories{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>📂 Catégories</h1>
+        <a href="{{ path('app_categorie_nouvelle') }}" class="btn btn-primary">➕ Nouvelle catégorie</a>
+    </div>
+
+    {% if categories is empty %}
+        <div class="alert alert-info text-center py-5">
+            <p class="mb-0">Aucune catégorie pour le moment.</p>
+        </div>
+    {% else %}
+        <div class="row g-4">
+            {% for categorie in categories %}
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 border-start border-primary border-4">
+                        <div class="card-body">
+                            <h3 class="card-title h5 mb-3">{{ categorie.nom }}</h3>
+                            {% if categorie.description %}
+                                <p class="card-text text-muted small">{{ categorie.description }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer bg-transparent border-0 pt-0 d-flex justify-content-between align-items-center">
+                            <span class="badge bg-secondary rounded-pill">📰 {{ categorie.articles|length }} article(s)</span>
+                            <div>
+                                <a href="{{ path('app_categorie_detail', {id: categorie.id}) }}" class="btn btn-outline-primary btn-sm">👁️ Voir</a>
+                                <a href="{{ path('app_categorie_modifier', {id: categorie.id}) }}" class="btn btn-outline-secondary btn-sm">✏️</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
