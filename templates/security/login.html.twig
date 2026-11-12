@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <form method="post">
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+
+                    {% if app.user %}
+                        <div class="alert alert-info mb-3">
+                            Vous êtes déjà connecté en tant que {{ app.user.userIdentifier }},
+                            <a href="{{ path('app_logout') }}">Déconnexion</a>
+                        </div>
+                    {% endif %}
+
+                    <h1 class="h3 mb-4 text-center">🔐 Connexion</h1>
+
+                    <div class="mb-3">
+                        <label for="inputEmail" class="form-label">Email</label>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail"
+                               class="form-control" autocomplete="email" required autofocus>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inputPassword" class="form-label">Mot de passe</label>
+                        <input type="password" name="password" id="inputPassword"
+                               class="form-control" autocomplete="current-password" required>
+                    </div>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <div class="form-check mb-3">
+                        <input type="checkbox" name="_remember_me" id="remember" class="form-check-input">
+                        <label for="remember" class="form-check-label">Se souvenir de moi</label>
+                    </div>
+
+                    <button class="btn btn-lg btn-success w-100 mt-2" type="submit">Se connecter</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
