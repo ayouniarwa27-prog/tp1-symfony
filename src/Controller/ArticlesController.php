@@ -24,6 +24,7 @@ class ArticlesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $article->setAuteurUser($this->getUser());
             $em->persist($article);
             $em->flush();
 
@@ -60,6 +61,9 @@ class ArticlesController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function modifier(Article $article, Request $request, EntityManagerInterface $em): Response
     {
+     if ($article->getAuteurUser() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
+        throw $this->createAccessDeniedException('Vous n\'êtes pas l\'auteur !');
+    }
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
