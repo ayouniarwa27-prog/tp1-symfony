@@ -3,6 +3,13 @@
 {% block title %}Liste des articles{% endblock %}
 
 {% block body %}
+{% if is_granted('ROLE_USER') %}
+    <a href="{{ path('app_article_nouveau') }}" class="btn btn-primary">➕ Créer un article</a>
+{% endif %}
+{% if is_granted('ROLE_USER') %}
+    <a href="{{ path('app_article_modifier', {id: article.id}) }}" class="btn btn-warning btn-sm">✏️ Modifier</a>
+    {# ton bouton/formulaire Supprimer ici #}
+{% endif %}
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>📰 Articles</h1>
         <a href="{{ path('app_article_nouveau') }}" class="btn btn-primary">➕ Nouvel article</a>

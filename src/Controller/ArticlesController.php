@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Entity\Article;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
@@ -15,6 +16,7 @@ class ArticlesController extends AbstractController
 {
     // CREATE
     #[Route('/articles/nouveau', name: 'app_article_nouveau')]
+    #[IsGranted('ROLE_USER')]
     public function nouveau(Request $request, EntityManagerInterface $em): Response
     {
         $article = new Article();
@@ -55,6 +57,7 @@ class ArticlesController extends AbstractController
 
     // UPDATE
     #[Route('/articles/{id}/modifier', name: 'app_article_modifier', requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_USER')]
     public function modifier(Article $article, Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(ArticleType::class, $article);
@@ -76,6 +79,7 @@ class ArticlesController extends AbstractController
 
     // DELETE (POST uniquement + jeton CSRF)
     #[Route('/articles/{id}/supprimer', name: 'app_article_supprimer', requirements: ['id' => '\d+'], methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
     public function supprimer(Article $article, Request $request, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('supprimer_' . $article->getId(), $request->request->get('_token'))) {
